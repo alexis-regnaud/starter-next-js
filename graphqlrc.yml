@@ -9,6 +9,8 @@ generates:
       minify: true
   ./__generated__/types.ts:
     - typescript
+  ./__generated__/types/graphql.d.ts:
+    - typescript-graphql-files-modules
   ./:
     preset: near-operation-file
     presetConfig:
