@@ -1,6 +1,16 @@
 /* pages/index.js */
 import React, { useState } from "react";
 import styled from "styled-components";
+import gql from "graphql-tag";
+import test from "../components/test.graphql";
+
+const query = gql`
+  {
+    restaurants {
+      id
+    }
+  }
+`;
 
 export default function Home() {
   return (

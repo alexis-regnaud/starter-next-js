@@ -24,7 +24,8 @@ module.exports = {
     sourceType: 'module',
     project: [
       './tsconfig.json'
-    ]
+    ],
+    extraFileExtensions: ['.graphql']
   },
   plugins: [
     'react',
@@ -40,6 +41,7 @@ module.exports = {
       }
     }
   },
+  ignorePatterns: ["**/__generated__/*.tsx"],
   rules: {
     'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
     "react/jsx-props-no-spreading": ['off'],
@@ -54,7 +56,7 @@ module.exports = {
       }
     ],
     "graphql/template-strings": ['error', {
-      env: 'apollo',
+      env: 'literal',
       schemaJson: require('./__generated__/introspection.json'),
     }]
   }
