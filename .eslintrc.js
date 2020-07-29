@@ -58,6 +58,9 @@ module.exports = {
     "graphql/template-strings": ['error', {
       env: 'literal',
       schemaJson: require('./__generated__/introspection.json'),
-    }]
+    }],
+    "jsx-a11y/anchor-is-valid": 0,
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-use-before-define" : "off"
   }
 };

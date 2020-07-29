@@ -1,44 +1,89 @@
 /* _app.js */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import withApollo from "next-with-apollo";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient, { InMemoryCache, NormalizedCacheObject } from "apollo-boost";
 import { parseCookies } from "nookies";
 import { AppProps } from "next/app";
-import { ThemeProvider } from "styled-components";
+import { Router } from "next/router";
+import { ThemeProvider, jsx } from "theme-ui";
+import { motion, AnimatePresence } from "framer-motion";
+import disableScroll from "disable-scroll";
+import NProgress from "nprogress"; // nprogress module
 import Layout from "../components/Layout";
+import theme from "../styles/theme";
+import "react-multi-carousel/lib/styles.css";
+import "../styles/nprogress.css"; // styles of nprogress
+import { usePageTransition, PageTransitionProvider } from "../components/pageTransition/usePageTransition";
 
-const theme = {
-  primary: "green",
-};
+/** @jsx jsx */
 
 interface AppPropsType extends AppProps {
   apollo: ApolloClient<NormalizedCacheObject>;
   isAuthenticated: boolean;
 }
 
-const App = ({ Component, pageProps, apollo, isAuthenticated }: AppPropsType) => {
+const App = ({ Component, pageProps, apollo, isAuthenticated, router }: AppPropsType) => {
+  const methods = usePageTransition();
+  const {
+    isTransitioning,
+    handleRouteChangeStart,
+    handleRouteChangeComplete,
+    handleRouteChangeError,
+  } = methods;
+
   // Remove the server-side generated CSS
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles?.parentNode) jssStyles.parentNode.removeChild(jssStyles);
   }, []);
 
+  useEffect(() => {
+    Router.events.on("routeChangeStart", handleRouteChangeStart);
+    Router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    Router.events.on("routeChangeError", handleRouteChangeError);
+
+    return () => {
+      Router.events.off("routeChangeStart", handleRouteChangeStart);
+      Router.events.off("routeChangeComplete", handleRouteChangeComplete);
+      Router.events.off("routeChangeError", handleRouteChangeError);
+    };
+  }, []);
+
   return (
     <ApolloProvider client={apollo}>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossOrigin="anonymous"
-        />
-      </Head>
+      <Head>{/* Header */}</Head>
       <ThemeProvider theme={theme}>
-        <Layout isAuthenticated={isAuthenticated} {...pageProps}>
-          <Component {...pageProps} />
-        </Layout>
+        <PageTransitionProvider value={methods}>
+          <div>
+            <Layout isAuthenticated={isAuthenticated} {...pageProps}>
+              <AnimatePresence exitBeforeEnter>
+                <Component {...pageProps} key={router.pathname} />
+              </AnimatePresence>
+            </Layout>
+            <AnimatePresence>
+              {isTransitioning && (
+                <motion.div
+                  initial={{ opacity: 1, y: "100%" }}
+                  animate={{ opacity: 1, y: "0%" }}
+                  exit={{ opacity: 0, transition: { ease: "easeInOut", duration: 0.8 } }}
+                  transition={{ duration: 0.9, ease: [0.8, 0, 0.2, 1] }}
+                  sx={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "secondary",
+                    pointerEvents: "none",
+                    zIndex: 2000,
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </div>
+        </PageTransitionProvider>
       </ThemeProvider>
     </ApolloProvider>
   );
