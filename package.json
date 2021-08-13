@@ -26,7 +26,7 @@
     "graphql-config": "^3.0.2",
     "graphql-tag": "^2.10.3",
     "lodash": "^4.17.15",
-    "next": "9.3.6",
+    "next": "11.1.0",
     "next-with-apollo": "^5.0.1",
     "nookies": "^2.2.4",
     "nprogress": "^0.2.0",
