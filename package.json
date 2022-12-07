@@ -44,7 +44,7 @@
     "ua-parser-js": "^0.7.21"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.13.5",
+    "@graphql-codegen/cli": "^1.21.8",
     "@graphql-codegen/introspection": "^1.13.5",
     "@graphql-codegen/near-operation-file-preset": "^1.13.5",
     "@graphql-codegen/typescript": "^1.13.5",
