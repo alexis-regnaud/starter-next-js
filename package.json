@@ -20,7 +20,7 @@
     "apollo-boost": "^0.4.7",
     "disable-scroll": "^0.5.1",
     "emotion-theming": "^10.0.27",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "framer-motion": "^1.11.1",
     "graphql": "^15.0.0",
     "graphql-config": "^3.0.2",
